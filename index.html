@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Combo Collection</title>
+        <style>
+            body{
+                background-color: #171717;
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+                padding: 50px;
+            }
+            .games {
+                display: grid;
+                grid-template-columns: repeat(3, 400px);
+                grid-template-rows: repeat(3, 240px);
+                gap: 50px 50px;
+                list-style: none;
+
+            }
+
+            .games li {
+                text-align: center;
+                background-color: #242424;
+                box-shadow: 0 2px 6px #000000;
+                border-radius: 35px;
+            }
+
+            .games li:hover{
+                transform: scale(1.0167);
+            }
+
+            .games img {
+                width:95%;
+                height:auto;
+            }
+
+
+            .games a{
+                color: inherit;
+            }
+        </style>
+    </head>
+    <body>
+        <ul class="games">
+            <li>
+                <a href="./Games/GGST.html">
+                    <img src="./Images/ggstLogo.png"/>
+                </a>
+            </li>
+
+            <li>
+                <a href="./Games/KOFXV.html">
+                    <img src="./Images/kofxvLogo.png"/>
+                </a>
+            </li>
+
+            <li>
+                <a href="./Games/SF6.html">
+                    <img src="./Images/sf6Logo.png"/>
+                </a>
+            </li>
+
+            <li>
+                <a href="./Games/T8.html">
+                    <img src="./Images/t8Logo.png"/>
+                </a>
+            </li>
+
+            <li>
+                <a href="./Games/UNI2.html">
+                    <img src="./Images/uni2Logo.png"/>
+                </a>
+            </li>
+        </ul>
+    </body>
+</html>

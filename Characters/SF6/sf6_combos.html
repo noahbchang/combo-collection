@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><span id="character-name"></span> Combos</title>
+    <style>
+        body{
+                background-color: #171717;
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+                padding: 50px;
+            }
+
+        h1 {
+            text-align: center;
+            color:#ffffff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px inset #ffffff;
+            table-layout:fixed;
+        }
+
+        th{
+            color:#ffffff;
+            border: 2px inset #ffffff;
+        }
+        td {
+            text-align: center;
+            color:#ffffff;
+            border: 2px inset #ffffff;
+        }
+
+        .starter {
+            width: 7%;
+        }
+        .tags { 
+            width: 15%; 
+        }
+
+        .combo {
+            width: 37%;
+        }
+
+        .damage {
+            width: 10%;
+        }
+
+        .notes {
+            width: 25%;
+        }
+
+        .delete {
+            width: 6%;
+        }
+
+        .tag-container {
+            display:flex;
+            flex-wrap: wrap;
+        }
+
+        .tag{
+            display:inline-flex;
+            align-items:center;
+            border-radius: 999px;
+            color: #ffffff;
+            padding: 3px 7px;
+            margin: 5px 5px 5px 0;
+            justify-content: center;
+        }
+
+        .red {
+            background-color: #FF3B3B;
+        }
+        .orange {
+            background-color: orange;
+        }
+        .green {
+            background-color: #87FA95;
+        }
+        .purple{
+            background-color: #D487FA;
+        }
+
+        .gray{
+            background-color: gray;
+        }
+        form {
+            margin-bottom: 5px;
+        }
+
+        input, button {
+            margin: 5px;
+        }
+
+        input[type="text"]{
+            width: 90%;
+            padding: 10px 15px;
+            margin: 4px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1><span id="character-name"></span></h1>
+    <form autocomplete="off" id="add-form">
+        <input type="text" id="starter" placeholder="Starter" required />
+        <input type="text" id="tags" placeholder="Punish, Counter, Midscreen, Corner, etc." required />
+        <input type="text" id="combo" placeholder="Combo" required />
+        <input type="text" id="damage" placeholder="Damage" required />
+        <input type="text" id="notes" placeholder="Notes" required/>
+        <button type="submit">Add</button>
+    </form>
+
+    <table>
+        <colgroup>
+            <col class="starter" />
+            <col class="tags" />
+            <col class="combo" />
+            <col class="damage" />
+            <col class="notes" />
+
+        </colgroup>
+        <thead>
+            <tr>
+                <th id="starter-header">Starter</th>
+                <th>Tags</th>
+                <th>Combo</th>
+                <th>Damage</th>
+                <th>Notes</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="member-table">
+        </tbody>
+    </table>
+
+    
+
+    <script>
+
+        function upToBat() {
+            const parameters = new URLSearchParams(window.location.search);
+            return parameters.get('character') || 'default';
+        }
+
+        const character = upToBat();
+        const storageChar = `combos-${character}`;
+        const capitalized = character.charAt(0).toUpperCase() + character.slice(1);
+        document.title = `${capitalized} Combos`;
+        document.getElementById('character-name').textContent = capitalized;
+        function saveCombos(combos) {
+            localStorage.setItem(storageChar, JSON.stringify(combos));
+        }
+
+        function loadCombos() {
+            const storage = localStorage.getItem(storageChar);
+            return storage ? JSON.parse(storage) : [];
+        }
+
+        let combos = loadCombos();
+
+        const form = document.getElementById('add-form');
+        const table = document.getElementById('member-table');
+        const colors = {
+            "Punish": "orange",
+            "Counter": "red",
+            "Midscreen": "green",
+            "Corner": "purple"
+        };
+        function colorGrab(tag) {
+            const color = colors[tag];
+            return `tag ${color ? color: 'gray'}`;
+            
+        }
+
+        function renderComboRow(comboData){
+            const row = document.createElement('tr');
+            const newStarterCell = document.createElement('td');
+
+            newStarterCell.textContent = comboData.starter;
+
+            const newTagCell = document.createElement('td');
+            const tagContainer = document.createElement('div');
+            tagContainer.className = 'tag-container';
+            comboData.tags.forEach(tag => {
+                const taggy = document.createElement('span');
+                taggy.className = colorGrab(tag);
+                taggy.textContent = tag;
+                tagContainer.appendChild(taggy);
+            });
+
+            newTagCell.appendChild(tagContainer);
+            const newComboCell = document.createElement('td');
+            newComboCell.textContent = comboData.combo;
+            const newDamageCell = document.createElement('td');
+            newDamageCell.textContent = comboData.damage;
+            const newNotesCell = document.createElement('td');
+            newNotesCell.textContent = comboData.notes;
+
+            const deleteCell = document.createElement('td');
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'X';
+            deleteButton.style.backgroundColor = '#FF0000';
+            deleteButton.style.color = '#ffffff';
+            deleteButton.style.border = 'none';
+            deleteButton.style.padding = '5px 10px';
+            deleteButton.style.cursor = 'pointer';
+
+            
+            deleteButton.addEventListener('click', function () {
+                row.remove();
+                combos = combos.filter(c => c !== comboData);
+                saveCombos(combos);
+                
+            });
+
+            deleteCell.appendChild(deleteButton);
+
+            row.appendChild(newStarterCell);
+            row.appendChild(newTagCell);
+            row.appendChild(newComboCell);
+            row.appendChild(newDamageCell);
+            row.appendChild(newNotesCell);
+            row.appendChild(deleteCell);
+
+            table.appendChild(row);
+        }
+
+        form.addEventListener('submit', function (e){
+            e.preventDefault();
+
+            const starter = document.getElementById('starter').value.trim();
+            const tagsInput = document.getElementById('tags').value.trim();
+            const combo = document.getElementById('combo').value.trim();
+            const damage = document.getElementById('damage').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+            
+            const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag);
+
+            const newCombo = {
+                starter,
+                tags,
+                combo,
+                damage,
+                notes
+            };
+
+            combos.push(newCombo); 
+            saveCombos(combos); 
+            renderComboRow(newCombo); 
+            form.reset();
+
+        });
+        
+        combos.forEach(combo => renderComboRow(combo));
+    </script>
+
+    <script>
+    let sortAsc = true; 
+
+    document.getElementById('starter-header').addEventListener('click', function () {
+        const tbody = document.getElementById('member-table');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+            const aText = a.querySelector('td').textContent.trim();
+            const bText = b.querySelector('td').textContent.trim();
+
+            if (aText < bText) return sortAsc ? -1 : 1;
+            if (aText > bText) return sortAsc ? 1 : -1;
+            return 0;
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+
+        sortAsc = !sortAsc;
+        });
+    </script>
+    
+</body>
+</html>

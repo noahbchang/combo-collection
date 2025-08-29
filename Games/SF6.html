@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SF6 Characters</title>
+    <style>
+        body{
+                background-color: #171717;
+                font-family: Verdana, Helvetica, Arial, sans-serif;
+                padding: 50px;
+            }
+        .chars {
+            display: grid;
+            grid-template-columns: repeat(3, 400px);
+                grid-template-rows: repeat(3, 240px);          
+            gap: 50px 50px;
+            list-style: none;
+
+        }
+        
+        .chars li {
+            text-align: center;
+            background-color: #242424;
+            box-shadow: 0 2px 6px #000000;
+            border-radius: 35px;
+            overflow:hidden;
+        }
+
+        .chars li:hover{
+            transform: scale(1.0167);
+        }
+
+        .chars img {
+            width:100%;
+            height:auto;
+        }
+
+
+        .games a{
+            color: inherit;
+        }
+        </style>
+</head>
+<body>
+    <ul class="chars">
+        <li>
+            <a href="../Characters/SF6/sf6_combos.html?character=jamie">
+                <img src="../Images/jamie.png">
+            </a>
+        </li>
+
+        <li>
+            <a href="../Characters/SF6/sf6_combos.html?character=deejay">
+                <img src="../Images/deejay.png">
+            </a>
+        </li>
+    </ul>
+    
+</body>
+</html>
