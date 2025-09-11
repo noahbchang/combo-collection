@@ -1,2 +1,2 @@
 # combo-collection
-Website to collect combos for fighting games.
+Proof of concept type idea for website to collect combos for fighting games.
